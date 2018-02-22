@@ -2,7 +2,6 @@
 local resty_sha256 = require "resty.sha256"
 local str = require "resty.string"
 local singletons = require "kong.singletons"
-local public_key_der_location =  os.getenv("KONG_SSL_CERT_DER")
 local private_key_location =  os.getenv("KONG_SSL_CERT_KEY")
 local pl_file = require "pl.file"
 local json = require "cjson"
@@ -46,7 +45,7 @@ local function getKongKey(key, location)
 end
 
 local function encode_token(data, key)
-  local header = {typ = "JWT", alg = "RS256", x5c = {b64_encode(getKongKey("pubder",public_key_der_location))} }
+  local header = {typ = "JWT", alg = "RS256"}
   local segments = {
     b64_encode(json.encode(header)),
     b64_encode(json.encode(data))
